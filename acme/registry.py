@@ -1,7 +1,7 @@
 from __future__ import annotations
+from pathlib import Path
 from typing import Literal
 from pydantic import BaseModel
-from pathlib import Path
 import yaml
 
 class AugmenterRef(BaseModel):
@@ -9,17 +9,9 @@ class AugmenterRef(BaseModel):
     phase: Literal["likelihood", "theory", "sampler", "finalize"]
     kwargs: dict = {}
 
-class TransformRef(BaseModel):
-    name: str
-    when: dict = {}
-
-class DatasetEntry(BaseModel):
-    name: str
-    when: dict = {}
-
 class DatasetEntry(BaseModel):
     blocks: list[str]
-    tags: list[str] - []
+    tags: list[str] = []
     candl: dict | None = None
 
 class CombinationEntry(BaseModel):
@@ -36,12 +28,10 @@ class ModelEntry(BaseModel):
 class TheoryProfileEntry(BaseModel):
     default_block: str
     precision_block: str | None = None
-    driver_imports: list[str] = []
     augmenters: list[AugmenterRef] = []
 
 class LikelihoodProfileEntry(BaseModel):
     blocks: list[str] = []
-    driver_imports: list[str] = []
     augmenters: list[AugmenterRef] = []
 
 class Registry(BaseModel):

@@ -20,6 +20,7 @@ class DataRequest(BaseModel):
 class Defaults(BaseModel):
     theory_profile: str
     likelihood_profile: str
+    sampler_block: str
     convergence: ConvergenceDefaults
     slurm: SlurmDefaults
 
@@ -29,6 +30,7 @@ class ChainSpec(BaseModel):
     data: DataRequest
     theory_profile: str | None = None
     likelihood_profile: str | None = None
+    sampler_block: str | None = None
     convergence: ConvergenceDefaults | None = None
     slurm: SlurmDefaults | None = None
 
