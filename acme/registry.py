@@ -42,7 +42,7 @@ class Registry(BaseModel):
     models: dict[str, ModelEntry] = {}
     theory_profiles: dict[str, TheoryProfileEntry] = {}
     likelihood_profiles: dict[str, LikelihoodProfileEntry] = {}
-    transforms: list[TransformRef] = []
+    transforms: list[str] = []
 
 def load_registry(path: Path) -> Registry:
     path = Path(path).resolve()
