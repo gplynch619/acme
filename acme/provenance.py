@@ -33,6 +33,7 @@ class ResolvedChain(BaseModel):
     sampler_block: str
     slurm: dict
     convergence: dict
+    injected_params: dict[str, dict] = {}
 
 
 class CampaignManifest(BaseModel):

@@ -31,6 +31,7 @@ class BlockPlan(BaseModel):
     augmenters: list[AugmenterRef] = []
     model_warnings: list[str] = []
     transforms_applied: list[str] = []
+    injected_params: dict[str, dict] = {}
 
     model_config = {"arbitrary_types_allowed": True}
 
@@ -127,7 +128,7 @@ def resolve(intent: NormalizedIntent, registry: Registry) -> BlockPlan:
         plan.transforms_applied.append(name)
 
     #7. sort augmenters
-    phase_order = {"theory": 0, "likelihood": 1, "sampler": 2, "finalize": 3}
+    phase_order = {"likelihood": 0, "theory": 1, "sampler": 2, "finalize": 3}
     plan.augmenters = sorted(plan.augmenters, key=lambda a: phase_order[a.phase])
 
     return plan

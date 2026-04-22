@@ -8,6 +8,7 @@ class AugmenterRef(BaseModel):
     name: str
     phase: Literal["likelihood", "theory", "sampler", "finalize"]
     kwargs: dict = {}
+    injected_params: dict[str, dict] = {}
 
 class DatasetEntry(BaseModel):
     blocks: list[str]
