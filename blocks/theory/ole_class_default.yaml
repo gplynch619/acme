@@ -1,0 +1,24 @@
+theory:
+  classy:
+    extra_args:
+      N_ur: 2.0308
+      N_ncdm: 1
+      T_ncdm: 0.71611
+      lensing: 'yes'
+      non linear: halofit
+      accurate_lensing: 1.0
+    emulate: true
+    ignore_obsolete: true
+    emulator_settings:
+      training_verbose: false
+      skip_emulation_quantities:
+        - T_cmb
+        - dependency_params
+        - bb
+        - pp
+        - tp
+        - ell
+      # Filled at runtime by ole_paths and ole_dimensionality augmenters:
+      working_directory: ""
+      plotting_directory: ""
+      dimensionality: 1

@@ -1,0 +1,9 @@
+theory:
+  classy:
+    extra_args:
+      N_ur: 2.0308
+      N_ncdm: 1
+      T_ncdm: 0.71611
+      lensing: 'yes'
+      non linear: halofit
+      accurate_lensing: 1.0

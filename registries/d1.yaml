@@ -1,0 +1,122 @@
+version: 1
+backend_family: cobaya
+
+# ---------------------------------------------------------------------------
+# Datasets  (canonical names; implementations keyed by likelihood profile variant)
+# ---------------------------------------------------------------------------
+datasets:
+  SPT3G_D1_TnE_lite:
+    tags: [small_scale]
+    default_implementation: candl  # no native block exists; candl is the only interface
+    implementations:
+      candl:
+        blocks: [SPT3G_D1_TnE_lite_candl]
+        augmenters:
+          - name: candl_build_likelihoods
+            phase: likelihood
+            kwargs:
+              data_set_file: SPT3G_D1_TnE_lite
+              name: S1920_lite
+
+  act:
+    tags: []
+    default_implementation: native
+    implementations:
+      native:
+        blocks: [act_dr6_cmbonly_native]
+
+  p_act:
+    tags: []
+    default_implementation: native
+    implementations:
+      native:
+        blocks: [p_act_native]
+
+  planck_lowl:
+    tags: []
+    default_implementation: native
+    implementations:
+      native:
+        blocks: [planck_2018_lowl]
+
+  planck_highl:
+    tags: []
+    default_implementation: native
+    implementations:
+      native:
+        blocks: [planck_2018_highl_plik]
+
+  desi_dr2_bao:
+    tags: [bao]
+    default_implementation: native
+    implementations:
+      native:
+        blocks: [desi_dr2_bao]
+
+# ---------------------------------------------------------------------------
+# Combinations
+# ---------------------------------------------------------------------------
+combinations:
+  planck:
+    matches: [planck_lowl, planck_highl]
+    alias: planck
+    blocks: []
+    tags: []
+
+  p_act_full:
+    matches: [planck_lowl, p_act]
+    alias: p_act_full
+    blocks: []
+    tags: []
+
+# ---------------------------------------------------------------------------
+# Models
+# ---------------------------------------------------------------------------
+models:
+  lcdm:
+    param_block: lcdm_class
+    warnings: []
+    excluded_tags: []
+
+# ---------------------------------------------------------------------------
+# Theory profiles
+# ---------------------------------------------------------------------------
+theory_profiles:
+  class_default:
+    default_block: class_default
+    precision_block: class_high_precision
+    augmenters: []
+
+  ole_class_default:
+    default_block: ole_class_default
+    precision_block: ole_class_high_precision
+    augmenters:
+      - name: ole_paths
+        phase: finalize
+      - name: ole_mcmc
+        phase: finalize
+      - name: ole_dimensionality
+        phase: cleanup
+
+# ---------------------------------------------------------------------------
+# Likelihood profiles
+# ---------------------------------------------------------------------------
+likelihood_profiles:
+  native:
+    dataset_variant: native
+
+  candl:
+    dataset_variant: candl
+
+# ---------------------------------------------------------------------------
+# Base augmenters (run on every chain regardless of profile)
+# ---------------------------------------------------------------------------
+base_augmenters:
+  - name: planck_act_coupling
+    phase: finalize
+
+# ---------------------------------------------------------------------------
+# Transforms
+# ---------------------------------------------------------------------------
+transforms:
+  - precision_upgrade_on_small_scale

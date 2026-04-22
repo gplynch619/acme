@@ -1,0 +1,39 @@
+version: 1
+name: lcdm_spt_class
+backend: cobaya
+registry: ../registries/d1.yaml
+block_library: ../blocks
+output_dir: ../out/lcdm_spt_class
+
+defaults:
+  theory_profile: class_default
+  likelihood_profile: candl
+  sampler_block: cobaya_mcmc_default
+  convergence:
+    metric: R-1
+    target: 0.02
+  slurm:
+    partition: cosmology
+    walltime: "24:00:00"
+    memory_gb: 32
+    ntasks_per_node: 4
+
+chains:
+  - id: lcdm_spt
+    model: lcdm
+    data:
+      name: SPT3G_D1_TnE_lite
+      datasets: [SPT3G_D1_TnE_lite]
+
+  - id: lcdm_p_act
+    model: lcdm
+    likelihood_profile: native
+    data:
+      name: P-ACT
+      datasets: [planck_lowl, p_act]
+
+  - id: lcdm_planck_spt
+    model: lcdm
+    data:
+      name: Planck+SPT3G
+      datasets: [planck_lowl, planck_highl, SPT3G_D1_TnE_lite]

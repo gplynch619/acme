@@ -1,0 +1,18 @@
+likelihood:
+  act_dr6_cmbonly.ACTDR6CMBonly:
+    ell_cuts:
+      EE: [600, 8500]
+      TE: [600, 8500]
+      TT: [600, 8500]
+    input_file: dr6_data_cmbonly.fits
+    lmax_theory: 9500
+params:
+  A_act:
+    prior: {min: 0.5, max: 1.5}
+    ref: {dist: norm, loc: 1.0, scale: 0.1}
+    latex: A_{\rm ACT}
+  P_act:
+    prior: {min: 0.9, max: 1.1}
+    ref: {dist: norm, loc: 1.0, scale: 0.01}
+    proposal: 0.01
+    latex: p_{\rm ACT}

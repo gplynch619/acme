@@ -36,6 +36,7 @@ class CobayaBackend:
                 "module": fn.__module__,
                 "phase": aug.phase,
                 "kwargs": aug.kwargs,
+                "nuisance_params": aug.nuisance_params,
             })
 
         return {"launch/cobaya.yaml": yaml.dump(config, default_flow_style=False, sort_keys = True),

@@ -1,0 +1,7 @@
+sampler:
+  mcmc:
+    drag: false
+    proposal_scale: 1.9
+    Rminus1_stop: 0.02
+    Rminus1_cl_stop: 0.2
+    oversample_power: 0.4

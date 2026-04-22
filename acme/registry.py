@@ -10,10 +10,14 @@ class AugmenterRef(BaseModel):
     kwargs: dict = {}
     nuisance_params: dict[str, dict] = {}
 
+class DatasetImplementation(BaseModel):
+    blocks: list[str] = []
+    augmenters: list[AugmenterRef] = []
+
 class DatasetEntry(BaseModel):
-    blocks: list[str]
+    implementations: dict[str, DatasetImplementation]
+    default_implementation: str = "native"
     tags: list[str] = []
-    candl: dict | None = None
 
 class CombinationEntry(BaseModel):
     matches: list[str]
@@ -34,6 +38,7 @@ class TheoryProfileEntry(BaseModel):
 class LikelihoodProfileEntry(BaseModel):
     blocks: list[str] = []
     augmenters: list[AugmenterRef] = []
+    dataset_variant: str = "native"
 
 class Registry(BaseModel):
     version: int
@@ -43,6 +48,7 @@ class Registry(BaseModel):
     models: dict[str, ModelEntry] = {}
     theory_profiles: dict[str, TheoryProfileEntry] = {}
     likelihood_profiles: dict[str, LikelihoodProfileEntry] = {}
+    base_augmenters: list[AugmenterRef] = []
     transforms: list[str] = []
 
 def load_registry(path: Path) -> Registry:

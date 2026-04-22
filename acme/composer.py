@@ -80,22 +80,21 @@ def resolve(intent: NormalizedIntent, registry: Registry) -> BlockPlan:
             else:
                 model_warnings.append(f"Multiple combinations found for datasets {intent.datasets!r} - using first match")
 
-    combo_covered: set[str] = set()
     if matched_combo is not None:
         blocks.extend(matched_combo.blocks)
         dataset_tags.extend(matched_combo.tags)
-        combo_covered = set(matched_combo.matches)
 
     for ds_name in intent.datasets:
-        if ds_name in combo_covered:
-            continue
         ds = registry.datasets[ds_name]
-        blocks.extend(ds.blocks)
+        impl = ds.implementations.get(lik.dataset_variant) or ds.implementations[ds.default_implementation]
+        blocks.extend(impl.blocks)
+        augmenters.extend(impl.augmenters)
         dataset_tags.extend(ds.tags)
 
     #4. likelihood extra blocks + augmenters
     blocks.extend(lik.blocks)
     augmenters.extend(lik.augmenters)
+    augmenters.extend(registry.base_augmenters)
 
     #5. sampler block
     blocks.append(intent.sampler_block)

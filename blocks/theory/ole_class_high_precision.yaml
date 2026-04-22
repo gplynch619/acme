@@ -1,0 +1,49 @@
+theory:
+  classy:
+    extra_args:
+      N_ur: 2.0308
+      N_ncdm: 1
+      T_ncdm: 0.71611
+      lensing: 'yes'
+      accurate_lensing: 1.0
+      non linear: halofit
+      l_max_scalars: 9500
+      delta_l_max: 1800
+      hyper_flat_approximation_nu: 7000.0
+      hyper_sampling_flat: 32.0
+      l_linstep: 20
+      l_logstep: 1.025
+      l_max_g: 40
+      l_max_ncdm: 30
+      l_max_pol_g: 60
+      l_max_ur: 35
+      l_switch_limber: 30.0
+      perturbations_sampling_stepsize: 0.05
+      radiation_streaming_approximation: 2
+      start_large_k_at_tau_h_over_tau_k: 0.05
+      start_small_k_at_tau_c_over_tau_h: 0.0004
+      start_sources_at_tau_c_over_tau_h: 0.006
+      tight_coupling_trigger_tau_c_over_tau_h: 0.005
+      tight_coupling_trigger_tau_c_over_tau_k: 0.008
+      tol_ncdm_synchronous: 1.0e-06
+      transfer_neglect_delta_k_S_e: 0.17
+      transfer_neglect_delta_k_S_t0: 0.17
+      transfer_neglect_delta_k_S_t1: 0.05
+      transfer_neglect_delta_k_S_t2: 0.17
+      ur_fluid_approximation: 2
+      ur_fluid_trigger_tau_over_tau_k: 130.0
+    emulate: true
+    ignore_obsolete: true
+    emulator_settings:
+      training_verbose: false
+      skip_emulation_quantities:
+        - T_cmb
+        - dependency_params
+        - bb
+        - pp
+        - tp
+        - ell
+      # Filled at runtime by ole_paths and ole_dimensionality augmenters:
+      working_directory: ""
+      plotting_directory: ""
+      dimensionality: 1
