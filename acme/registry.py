@@ -6,9 +6,9 @@ import yaml
 
 class AugmenterRef(BaseModel):
     name: str
-    phase: Literal["likelihood", "theory", "sampler", "finalize"]
+    phase: Literal["likelihood", "theory", "sampler", "finalize", "cleanup"]
     kwargs: dict = {}
-    injected_params: dict[str, dict] = {}
+    nuisance_params: dict[str, dict] = {}
 
 class DatasetEntry(BaseModel):
     blocks: list[str]

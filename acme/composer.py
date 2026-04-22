@@ -31,7 +31,7 @@ class BlockPlan(BaseModel):
     augmenters: list[AugmenterRef] = []
     model_warnings: list[str] = []
     transforms_applied: list[str] = []
-    injected_params: dict[str, dict] = {}
+    nuisance_params: dict[str, dict] = {}
 
     model_config = {"arbitrary_types_allowed": True}
 
@@ -128,7 +128,7 @@ def resolve(intent: NormalizedIntent, registry: Registry) -> BlockPlan:
         plan.transforms_applied.append(name)
 
     #7. sort augmenters
-    phase_order = {"likelihood": 0, "theory": 1, "sampler": 2, "finalize": 3}
+    phase_order = {"likelihood": 0, "theory": 1, "sampler": 2, "finalize": 3, "cleanup": 4}
     plan.augmenters = sorted(plan.augmenters, key=lambda a: phase_order[a.phase])
 
     return plan
@@ -161,6 +161,32 @@ def validate(plans: list[BlockPlan], library, registry: Registry) -> None:
         for aug in plan.augmenters:
             if aug.name not in AUGMENTER_REGISTRY:
                 errors.append(f"Chain {plan.id!r}: augmenter {aug.name!r} not registered")
+
+    for plan in plans:
+        # get all static params
+        static_params: set[str] = set()
+        for block_name in plan.blocks:
+            block_yaml = library.get(block_name).raw if block_name in library else {}
+            static_params.update(block_yaml.get("params", {}).keys())
+
+        # get injected params and check for collisions
+        seen_injected: dict[str, str] = {}  # param_name -> augmenter name
+        for aug in plan.augmenters:
+            for param_name in aug.nuisance_params:
+                if param_name in static_params:
+                    errors.append(
+                        f"Chain {plan.id!r}: param {param_name!r} is in a static block "
+                        f"and also injected by augmenter {aug.name!r}"
+                    )
+                elif param_name in seen_injected:
+                    errors.append(
+                        f"Chain {plan.id!r}: param {param_name!r} injected by both "
+                        f"{seen_injected[param_name]!r} and {aug.name!r}"
+                    )
+                else:
+                    seen_injected[param_name] = aug.name
+        for aug in plan.augmenters:
+            plan.nuisance_params.update(aug.nuisance_params)
 
     for plan in plans:
         for w in plan.model_warnings:

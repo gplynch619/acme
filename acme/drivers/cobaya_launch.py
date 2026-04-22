@@ -19,6 +19,7 @@ class AugmenterContext:
     run_mode: str = "run"
     output_dir: str = ""
     kwargs: dict = field(default_factory=dict)
+    nuisance_params: set = field(default_factory=set)
 
 def main():
 
@@ -49,7 +50,11 @@ def main():
 
     ctx = AugmenterContext(config=config)
 
-    phase_order = ["likelihood", "theory", "sampler", "finalize"]
+    ctx.nuisance_params = set(param for entry in augmenters for param in entry.get("nuisance_params", {}))
+
+    ctx.output_dir = config.get("output", "")
+
+    phase_order = ["likelihood", "theory", "sampler", "finalize", "cleanup"]
     for phase in phase_order:
         for entry in augmenters:
             if entry["phase"] != phase:
